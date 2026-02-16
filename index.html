@@ -214,7 +214,7 @@
                                             onClick={handleSaveSettings}
                                             className="flex-1 px-6 py-3 bg-yellow-500 hover:bg-yellow-600 text-red-900 rounded-lg font-bold transition-colors"
                                         >
-                                            Lưu Cài Đ���t
+                                            Lưu Cài Đt
                                         </button>
                                     </div>
                                 </motion.div>
@@ -231,6 +231,8 @@
             const [selectedValue, setSelectedValue] = useState(null);
             const [isAnimating, setIsAnimating] = useState(false);
             const [showResult, setShowResult] = useState(false);
+            const [history, setHistory] = useState([]);
+            const [totalAmount, setTotalAmount] = useState(0);
 
             const getRandomEnvelope = () => {
                 const totalWeight = Object.values(dropRates).reduce((sum, rate) => sum + rate, 0);
@@ -261,8 +263,27 @@
                         setSelectedValue(finalValue);
                         setIsAnimating(false);
                         setShowResult(true);
+                        
+                        // Update history and total
+                        const numericValue = parseInt(finalValue.replace('k', ''));
+                        setTotalAmount(prev => prev + numericValue);
+                        setHistory(prev => [
+                            { 
+                                amount: finalValue, 
+                                time: new Date().toLocaleTimeString('vi-VN'),
+                                timestamp: Date.now()
+                            }, 
+                            ...prev
+                        ].slice(0, 10)); // Keep last 10 results
                     }
                 }, 100);
+            };
+
+            const handleReset = () => {
+                setHistory([]);
+                setTotalAmount(0);
+                setSelectedValue(null);
+                setShowResult(false);
             };
 
             return (
@@ -349,7 +370,7 @@
                                     initial={{ opacity: 0, scale: 0.8, y: 20 }}
                                     animate={{ opacity: 1, scale: 1, y: 0 }}
                                     exit={{ opacity: 0, scale: 0.8 }}
-                                    className="text-center bg-gradient-to-r from-yellow-400/30 to-yellow-600/30 rounded-xl p-6 border-2 border-yellow-400"
+                                    className="text-center bg-gradient-to-r from-yellow-400/30 to-yellow-600/30 rounded-xl p-6 border-2 border-yellow-400 mb-6"
                                 >
                                     <p className="text-yellow-100 text-2xl font-bold mb-2">
                                         🎉 Chúc mừng! 🎉
@@ -360,6 +381,66 @@
                                 </motion.div>
                             )}
                         </AnimatePresence>
+
+                        {/* Total Amount Display */}
+                        {totalAmount > 0 && (
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="bg-red-950/50 rounded-xl p-6 mb-6 border-2 border-yellow-400/30"
+                            >
+                                <div className="text-center">
+                                    <p className="text-yellow-300 text-lg mb-2">Tổng Lì Xì Nhận Được:</p>
+                                    <p className="text-yellow-400 text-4xl font-bold">
+                                        {totalAmount.toLocaleString('vi-VN')}k VNĐ
+                                    </p>
+                                </div>
+                            </motion.div>
+                        )}
+
+                        {/* History */}
+                        {history.length > 0 && (
+                            <motion.div
+                                initial={{ opacity: 0, y: 20 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                className="bg-red-950/50 rounded-xl p-6 border-2 border-yellow-400/30"
+                            >
+                                <div className="flex items-center justify-between mb-4">
+                                    <h3 className="text-yellow-300 text-xl font-bold">
+                                        📜 Lịch Sử Lì Xì
+                                    </h3>
+                                    <button
+                                        onClick={handleReset}
+                                        className="text-yellow-100 hover:text-yellow-300 text-sm underline transition-colors"
+                                    >
+                                        Xóa lịch sử
+                                    </button>
+                                </div>
+                                <div className="space-y-2 max-h-64 overflow-y-auto">
+                                    {history.map((item, index) => (
+                                        <motion.div
+                                            key={item.timestamp}
+                                            initial={{ opacity: 0, x: -20 }}
+                                            animate={{ opacity: 1, x: 0 }}
+                                            transition={{ delay: index * 0.05 }}
+                                            className="flex justify-between items-center bg-red-900/50 p-3 rounded-lg hover:bg-red-900/70 transition-colors"
+                                        >
+                                            <div className="flex items-center gap-3">
+                                                <span className="text-yellow-400 font-bold text-lg">
+                                                    #{history.length - index}
+                                                </span>
+                                                <span className="text-yellow-100 text-sm">
+                                                    {item.time}
+                                                </span>
+                                            </div>
+                                            <span className="text-yellow-300 font-bold text-xl">
+                                                {item.amount.toUpperCase()}
+                                            </span>
+                                        </motion.div>
+                                    ))}
+                                </div>
+                            </motion.div>
+                        )}
                     </motion.div>
                 </div>
             );
