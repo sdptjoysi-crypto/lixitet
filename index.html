@@ -2,7 +2,7 @@
 <html lang="vi">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>Lì Xì Tết 2026</title>
     <script src="https://cdn.tailwindcss.com"></script>
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
@@ -13,7 +13,7 @@
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Dancing+Script:wght@700&family=Roboto:wght@400;700&display=swap');
 
-        body { font-family: 'Roboto', sans-serif; }
+        body { font-family: 'Roboto', sans-serif; overflow-x: hidden; }
         h1, h2, .tet-font { font-family: 'Dancing Script', cursive; }
 
         @keyframes glow {
@@ -23,7 +23,7 @@
         .glow-text { animation: glow 2s ease-in-out infinite; }
 
         /* Custom Scrollbar */
-        .custom-scrollbar::-webkit-scrollbar { width: 6px; }
+        .custom-scrollbar::-webkit-scrollbar { width: 4px; }
         .custom-scrollbar::-webkit-scrollbar-track { background: rgba(0, 0, 0, 0.1); }
         .custom-scrollbar::-webkit-scrollbar-thumb { background: rgba(250, 204, 21, 0.4); border-radius: 10px; }
     </style>
@@ -45,7 +45,7 @@
             const [petals, setPetals] = useState([]);
             useEffect(() => {
                 const emojis = ['🌸', '🌺', '✨', '🧧'];
-                setPetals(Array.from({ length: 25 }, (_, i) => ({
+                setPetals(Array.from({ length: 20 }, (_, i) => ({
                     id: i,
                     x: Math.random() * 100,
                     delay: Math.random() * 5,
@@ -83,13 +83,17 @@
 
             return (
                 <>
-                    <motion.header initial={{ y: -100 }} animate={{ y: 0 }} className="fixed top-0 left-0 right-0 z-40 bg-red-900/90 backdrop-blur-md border-b border-yellow-500 shadow-lg">
-                        <div className="max-w-7xl mx-auto px-4 py-3 flex justify-between items-center">
+                    <motion.header initial={{ y: -100 }} animate={{ y: 0 }} className="fixed top-0 left-0 right-0 z-50 bg-red-900/95 backdrop-blur-md border-b border-yellow-500 shadow-lg h-16 flex items-center">
+                        <div className="w-full px-4 flex justify-between items-center">
                             <div className="flex items-center gap-2 text-yellow-400">
-                                <Sparkles /><span className="text-2xl font-bold tet-font">Tết 2026</span>
+                                <Sparkles />
+                                <span className="text-xl md:text-2xl font-bold tet-font whitespace-nowrap">Tết 2026</span>
                             </div>
-                            <button onClick={() => setIsSettingsOpen(true)} className="text-yellow-100 hover:text-yellow-300 flex items-center gap-2 px-3 py-1 rounded-full hover:bg-white/10">
-                                <SettingsIcon /><span className="hidden md:inline font-medium">Cài đặt</span>
+                            
+                            {/* Nút cài đặt: Luôn hiện chữ Cài đặt để không bị mất */}
+                            <button onClick={() => setIsSettingsOpen(true)} className="text-yellow-100 hover:text-yellow-300 flex items-center gap-2 px-3 py-1.5 rounded-full bg-white/10 hover:bg-white/20 transition-colors border border-yellow-500/30">
+                                <div className="w-4 h-4 md:w-5 md:h-5"><SettingsIcon /></div>
+                                <span className="text-sm md:text-base font-medium whitespace-nowrap">Cài đặt</span>
                             </button>
                         </div>
                     </motion.header>
@@ -98,34 +102,34 @@
                         {isSettingsOpen && (
                             <motion.div 
                                 initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0 }} 
-                                className="fixed inset-0 bg-black/70 z-50 flex items-center justify-center p-4 backdrop-blur-sm"
+                                className="fixed inset-0 bg-black/80 z-[60] flex items-center justify-center p-4"
                                 onClick={() => setIsSettingsOpen(false)}
                             >
                                 <motion.div 
                                     initial={{ scale: 0.9, opacity: 0 }} animate={{ scale: 1, opacity: 1 }} exit={{ scale: 0.9, opacity: 0 }} 
-                                    className="bg-red-900 w-full max-w-lg rounded-2xl shadow-2xl border-2 border-yellow-500 overflow-hidden"
+                                    className="bg-red-900 w-full max-w-sm md:max-w-lg rounded-2xl shadow-2xl border-2 border-yellow-500 overflow-hidden flex flex-col max-h-[90vh]"
                                     onClick={e => e.stopPropagation()}
                                 >
-                                    <div className="p-4 border-b border-yellow-500/30 flex justify-between items-center bg-red-950/50">
-                                        <h2 className="text-xl font-bold text-yellow-400">Cài Đặt Tỷ Lệ (%)</h2>
-                                        <button onClick={() => setIsSettingsOpen(false)} className="text-yellow-100"><XIcon /></button>
+                                    <div className="p-4 border-b border-yellow-500/30 flex justify-between items-center bg-red-950/50 shrink-0">
+                                        <h2 className="text-lg md:text-xl font-bold text-yellow-400">Cài Đặt Tỷ Lệ (%)</h2>
+                                        <button onClick={() => setIsSettingsOpen(false)} className="text-yellow-100 p-1"><XIcon /></button>
                                     </div>
-                                    <div className="p-6 max-h-[50vh] overflow-y-auto custom-scrollbar bg-red-900">
+                                    <div className="p-4 md:p-6 overflow-y-auto custom-scrollbar bg-red-900 grow">
                                         <div className="space-y-4">
                                             {Object.entries(tempDropRates).map(([key, value]) => (
-                                                <div key={key} className="flex items-center justify-between">
-                                                    <label className="text-yellow-100 font-medium w-16">{key}</label>
+                                                <div key={key} className="flex items-center justify-between gap-3">
+                                                    <label className="text-yellow-100 font-medium w-12 md:w-16 text-sm md:text-base">{key}</label>
                                                     <input type="range" min="0" max="100" step="0.5" value={value} 
                                                         onChange={(e) => setTempDropRates({...tempDropRates, [key]: parseFloat(e.target.value)})}
-                                                        className="flex-1 mx-4 accent-yellow-500 h-2 bg-red-950 rounded-lg cursor-pointer" />
-                                                    <span className="text-yellow-300 font-bold w-12 text-right">{value}</span>
+                                                        className="flex-1 accent-yellow-500 h-2 bg-red-950 rounded-lg cursor-pointer" />
+                                                    <span className="text-yellow-300 font-bold w-12 text-right text-sm md:text-base">{value}</span>
                                                 </div>
                                             ))}
                                         </div>
                                     </div>
-                                    <div className="p-4 bg-red-950/50 flex gap-3">
-                                        <button onClick={handleReset} className="flex-1 py-2 bg-gray-700 text-white rounded-lg">Mặc định</button>
-                                        <button onClick={handleSave} className="flex-1 py-2 bg-yellow-500 text-red-900 font-bold rounded-lg shadow-lg">Lưu lại</button>
+                                    <div className="p-4 bg-red-950/50 flex gap-3 shrink-0">
+                                        <button onClick={handleReset} className="flex-1 py-2 bg-gray-700 text-white rounded-lg text-sm font-medium">Mặc định</button>
+                                        <button onClick={handleSave} className="flex-1 py-2 bg-yellow-500 text-red-900 font-bold rounded-lg shadow-lg text-sm">Lưu lại</button>
                                     </div>
                                 </motion.div>
                             </motion.div>
@@ -143,7 +147,6 @@
             const [showResult, setShowResult] = useState(false);
             const [history, setHistory] = useState([]);
 
-            // Thuật toán Trọng số tích lũy (Cumulative Weighted Random)
             const getRandomEnvelope = () => {
                 const totalWeight = Object.values(dropRates).reduce((sum, r) => sum + r, 0);
                 if (totalWeight === 0) return envelopeValues[0];
@@ -177,22 +180,22 @@
             };
 
             return (
-                <div className="max-w-4xl mx-auto px-4 pb-20 pt-8">
-                    <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="bg-red-900/80 backdrop-blur-md rounded-3xl p-6 shadow-2xl border-2 border-yellow-500/50">
-                        <div className="text-center mb-8">
-                            <h2 className="text-5xl font-bold text-yellow-400 mb-2 tet-font glow-text">Lì Xì May Mắn</h2>
-                            <p className="text-yellow-100/80">Nhấn nút để thử vận may!</p>
+                <div className="w-full max-w-3xl mx-auto px-4 pb-20 pt-4">
+                    <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} className="bg-red-900/80 backdrop-blur-md rounded-2xl md:rounded-3xl p-4 md:p-8 shadow-2xl border-2 border-yellow-500/50">
+                        <div className="text-center mb-6 md:mb-8">
+                            <h2 className="text-4xl md:text-5xl font-bold text-yellow-400 mb-2 tet-font glow-text">Lì Xì May Mắn</h2>
+                            <p className="text-yellow-100/80 text-sm md:text-base">Nhấn nút để thử vận may!</p>
                         </div>
 
-                        {/* ENVELOPES GRID */}
-                        <div className="grid grid-cols-3 md:grid-cols-5 gap-3 mb-8">
+                        {/* GRID */}
+                        <div className="grid grid-cols-3 md:grid-cols-5 gap-2 md:gap-4 mb-8">
                             {envelopeValues.map((value) => (
                                 <motion.div key={value} 
-                                    animate={selectedValue === value ? { scale: 1.1, borderColor: '#FACC15', backgroundColor: 'rgba(220, 38, 38, 0.8)' } : { scale: 1, borderColor: 'rgba(234, 179, 8, 0.3)', backgroundColor: 'rgba(69, 10, 10, 0.6)' }}
-                                    className="relative aspect-[3/4] rounded-xl border-2 flex flex-col items-center justify-center p-2 transition-colors duration-300"
+                                    animate={selectedValue === value ? { scale: 1.05, borderColor: '#FACC15', backgroundColor: 'rgba(220, 38, 38, 0.8)' } : { scale: 1, borderColor: 'rgba(234, 179, 8, 0.3)', backgroundColor: 'rgba(69, 10, 10, 0.6)' }}
+                                    className="relative aspect-[3/4] rounded-lg md:rounded-xl border flex flex-col items-center justify-center p-1 transition-colors duration-300"
                                 >
-                                    <div className="text-4xl mb-1">🧧</div>
-                                    <div className={`font-bold text-xl ${selectedValue === value ? 'text-yellow-300' : 'text-yellow-600'}`}>{value}</div>
+                                    <div className="text-2xl md:text-4xl mb-1">🧧</div>
+                                    <div className={`font-bold text-sm md:text-xl ${selectedValue === value ? 'text-yellow-300' : 'text-yellow-600'}`}>{value}</div>
                                     {selectedValue === value && showResult && (
                                         <motion.div initial={{ scale: 0 }} animate={{ scale: 1.5, opacity: [0, 1, 0] }} className="absolute inset-0 flex items-center justify-center pointer-events-none">
                                             <div className="text-yellow-300"><Sparkles /></div>
@@ -202,12 +205,23 @@
                             ))}
                         </div>
 
-                        {/* BUTTON */}
+                        {/* BUTTON - FIXED WHITESPACE WRAPPING */}
                         <div className="flex justify-center mb-8">
-                            <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={handleRandom} disabled={isAnimating}
-                                className={`px-10 py-4 rounded-full text-xl font-bold shadow-xl border-2 border-yellow-300 flex items-center gap-2 
-                                ${isAnimating ? 'bg-gray-600 text-gray-400' : 'bg-gradient-to-r from-yellow-400 to-yellow-600 text-red-900'}`}>
-                                <Sparkles /> {isAnimating ? 'Đang tráo...' : 'Rút Lì Xì'} <Sparkles />
+                            <motion.button 
+                                whileHover={{ scale: 1.05 }} 
+                                whileTap={{ scale: 0.95 }} 
+                                onClick={handleRandom} 
+                                disabled={isAnimating}
+                                className={`
+                                    px-6 py-3 md:px-10 md:py-4 
+                                    rounded-full text-lg md:text-xl font-bold shadow-xl border-2 border-yellow-300 
+                                    flex items-center gap-2 whitespace-nowrap
+                                    ${isAnimating ? 'bg-gray-600 text-gray-400' : 'bg-gradient-to-r from-yellow-400 to-yellow-600 text-red-900'}
+                                `}
+                            >
+                                <Sparkles /> 
+                                <span>{isAnimating ? 'Đang tráo...' : 'Rút Lì Xì'}</span> 
+                                <Sparkles />
                             </motion.button>
                         </div>
 
@@ -215,26 +229,26 @@
                         <AnimatePresence>
                             {showResult && selectedValue && (
                                 <motion.div initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0 }} className="text-center mb-8">
-                                    <div className="inline-block bg-yellow-500/20 border border-yellow-500 rounded-lg px-8 py-4">
-                                        <div className="text-yellow-200 text-sm uppercase mb-1">Chúc mừng bạn nhận được</div>
-                                        <div className="text-5xl font-bold text-yellow-400 drop-shadow-lg">{selectedValue} VNĐ</div>
+                                    <div className="inline-block bg-yellow-500/20 border border-yellow-500 rounded-lg px-6 py-3 md:px-8 md:py-4 w-full">
+                                        <div className="text-yellow-200 text-xs md:text-sm uppercase mb-1">Chúc mừng bạn nhận được</div>
+                                        <div className="text-4xl md:text-5xl font-bold text-yellow-400 drop-shadow-lg">{selectedValue} VNĐ</div>
                                     </div>
                                 </motion.div>
                             )}
                         </AnimatePresence>
 
-                        {/* HISTORY (Expanded width) */}
-                        <div className="bg-red-950/50 rounded-xl p-5 border border-yellow-500/20 h-72 flex flex-col w-full">
+                        {/* HISTORY */}
+                        <div className="bg-red-950/50 rounded-xl p-4 border border-yellow-500/20 h-64 flex flex-col w-full">
                             <div className="flex justify-between items-center mb-3 pb-2 border-b border-white/10">
-                                <h3 className="text-yellow-400 font-bold text-lg flex items-center gap-2">📜 Lịch Sử Rút</h3>
+                                <h3 className="text-yellow-400 font-bold text-base md:text-lg flex items-center gap-2">📜 Lịch Sử Rút</h3>
                                 {history.length > 0 && <button onClick={() => setHistory([])} className="text-xs text-red-300 hover:text-white underline">Xóa lịch sử</button>}
                             </div>
-                            <div className="overflow-y-auto custom-scrollbar flex-1 pr-2 space-y-2">
-                                {history.length === 0 ? <div className="text-center text-white/30 italic mt-10">Chưa có lượt quay nào</div> : 
+                            <div className="overflow-y-auto custom-scrollbar flex-1 pr-1 space-y-2">
+                                {history.length === 0 ? <div className="text-center text-white/30 italic mt-10 text-sm">Chưa có lượt quay nào</div> : 
                                     history.map((item, idx) => (
-                                        <motion.div key={idx} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex justify-between items-center bg-red-900/40 p-3 rounded-lg border border-red-800/50">
-                                            <span className="text-gray-400 text-sm">{item.time}</span>
-                                            <span className="text-yellow-400 font-bold text-lg">{item.amount}</span>
+                                        <motion.div key={idx} initial={{ opacity: 0, x: -10 }} animate={{ opacity: 1, x: 0 }} className="flex justify-between items-center bg-red-900/40 p-2 md:p-3 rounded-lg border border-red-800/50">
+                                            <span className="text-gray-400 text-xs md:text-sm">{item.time}</span>
+                                            <span className="text-yellow-400 font-bold text-base md:text-lg">{item.amount}</span>
                                         </motion.div>
                                     ))
                                 }
@@ -252,14 +266,14 @@
                 <div className="min-h-screen bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-red-800 via-red-900 to-black text-white selection:bg-yellow-500 selection:text-red-900 overflow-x-hidden">
                     <FallingPetals />
                     <Header onDropRatesChange={setDropRates} dropRates={dropRates} />
-                    <main className="pt-24 relative z-10">
-                        <div className="text-center mb-4 px-4">
-                            <h1 className="text-5xl md:text-7xl font-bold text-yellow-500 tet-font mb-2 drop-shadow-lg">Xuân Bính Ngọ</h1>
-                            <div className="text-2xl text-yellow-200/60 font-light tracking-widest uppercase">2026</div>
+                    <main className="pt-20 md:pt-24 relative z-10 w-full">
+                        <div className="text-center mb-2 px-4">
+                            <h1 className="text-4xl md:text-7xl font-bold text-yellow-500 tet-font mb-1 drop-shadow-lg">Xuân Bính Ngọ</h1>
+                            <div className="text-xl md:text-3xl text-yellow-200/60 font-light tracking-widest uppercase">2026</div>
                         </div>
                         <RedEnvelopeGame dropRates={dropRates} />
                     </main>
-                    <footer className="text-center py-6 text-yellow-500/30 text-sm relative z-10"><p>© 2026 Happy New Year</p></footer>
+                    <footer className="text-center py-6 text-yellow-500/30 text-xs md:text-sm relative z-10"><p>© 2026 Happy New Year</p></footer>
                 </div>
             );
         }
